@@ -21,8 +21,7 @@ SHA256=shasum -a 256
 
 DEB_ARCH := armel
 DEB_PACKAGING_FILES := $(patsubst kernel-debian/%,$(KERNEL_DIR)/debian/%, \
-                         $(wildcard kernel-debian/*)) \
-                         $(KERNEL_DIR)/debian/etc/fstab
+                         $(wildcard kernel-debian/*))
 DEB_VERSION := $(shell dpkg-parsechangelog -n1 -lkernel-debian/changelog \
                  | awk '$$1=="Version:" {print $$2}')
 DEB_CHANGESFILE := spacemonkey-base-image_$(DEB_VERSION)_armel.changes
