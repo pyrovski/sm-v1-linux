@@ -1,15 +1,15 @@
 # defining the kernel to use
-KERNEL_MAJOR := 3
-KERNEL_MINOR := 8
-KERNEL_PATCH := 6
-KERNEL_HASH  := afa898f3329c1f4aaede6e3dab57f7c522617e1b67f7c1abd73a91253a0cd10c
+KERNEL_MAJOR := 4
+KERNEL_MINOR := 9
+KERNEL_PATCH := 228
+KERNEL_HASH  := 8fbff429c6453036a0f79a55b4d85c1885c16999751198ddefdca7a3ff17fc34
 
 KERNEL_MIRROR := http://www.kernel.org/pub/
 
 KERNEL_SHORTVER := $(KERNEL_MAJOR).$(KERNEL_MINOR)
 KERNEL_VER      := $(KERNEL_SHORTVER).$(KERNEL_PATCH)
 KERNEL_TARBALL  := linux-$(KERNEL_VER).tar.xz
-KERNEL_URL_PATH := linux/kernel/v$(KERNEL_SHORTVER:3.%=3.x)/$(KERNEL_TARBALL)
+KERNEL_URL_PATH := linux/kernel/v$(KERNEL_SHORTVER:4.%=4.x)/$(KERNEL_TARBALL)
 KERNEL_URL      := $(KERNEL_MIRROR)/$(KERNEL_URL_PATH)
 KERNEL_DIR      := ./linux-$(KERNEL_VER)
 
@@ -93,14 +93,13 @@ kernel-source-stamp: kernel-verified-stamp
 	@echo "Extracting kernel ..."
 	tar xJf "$(KERNEL_TARBALL)"
 	@echo "Patching kernel"
-	patch -d $(KERNEL_DIR) -p1 < config/archlinuxarm.patch
-	patch -d $(KERNEL_DIR) -p1 < config/spacemonkey.patch
-	patch -d $(KERNEL_DIR) -p1 < config/mv_cesa_dma.patch
-	patch -d $(KERNEL_DIR) -p1 < config/fan5646.patch
-	cp config/mach-types $(KERNEL_DIR)/arch/arm/tools/
+# TODO: fix
+#	patch -d $(KERNEL_DIR) -p1 < config/fan5646.patch
+	cp config/kirkwood-spacemonkey.dts $(KERNEL_DIR)/arch/arm/boot/dts/
+	cp config/Makefile.dts $(KERNEL_DIR)/arch/arm/boot/dts/Makefile
 	mkdir $(KERNEL_DIR)/debian
 	@echo "Installing kernel configuration file"
-	cp config/linux-3.8.6.config "$(KERNEL_DIR)/.config"
+	cp config/linux-4.9.228.config "$(KERNEL_DIR)/.config"
 	touch $@
 
 PHONY += unpack_kernel

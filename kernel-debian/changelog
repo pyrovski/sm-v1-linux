@@ -1,3 +1,9 @@
+spacemonkey-base-image (4.9.228.spacemonkey-1) UNRELEASED; urgency=low
+
+  * Migrate to 4.9.228
+
+ -- Peter Bailey <peter.eldridge.bailey@gmail.com>  Tue, 23 Jun 2020 21:46:56 -0800
+
 spacemonkey-base-image (3.8.6.spacemonkey-11) unstable; urgency=low
 
   * Enable quota in kernel
@@ -33,7 +39,7 @@ spacemonkey-base-image (3.8.6.spacemonkey-7) UNRELEASED; urgency=low
 
 spacemonkey-base-image (3.8.6.spacemonkey-6) UNRELEASED; urgency=low
 
-  * Add spacemonkey hardware support 
+  * Add spacemonkey hardware support
 
  -- Tom Stokes <tom@spacemonkey.com>  Mon, 03 Jun 2013 22:03:37 -0600
 

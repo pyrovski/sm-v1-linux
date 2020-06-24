@@ -20,11 +20,13 @@ endif
 
 override_dh_auto_build:
 	@echo "Compiling kernel"
-	$(MAKE) MAKEFLAGS="-j3 --no-print-directory" uImage \
-	    CROSS_COMPILE=$(CROSS_COMPILE) ARCH=$(ARCH)
+	$(MAKE) MAKEFLAGS="-j5 --no-print-directory" zImage dtbs \
+	    CROSS_COMPILE=$(CROSS_COMPILE) ARCH=$(ARCH) LOADADDR=0x8000
+	cat arch/arm/boot/zImage arch/arm/boot/dts/kirkwood-spacemonkey.dtb > zImage
+	mkimage -C none -T kernel -a 0x8000 -e 0x8000 -A arm -O linux -n "$(PKGVER)" -d zImage arch/arm/boot/uImage
 	@echo "Compiling kernel modules"
-	$(MAKE) MAKEFLAGS="-j3 --no-print-directory" modules \
-	    CROSS_COMPILE=$(CROSS_COMPILE) ARCH=$(ARCH)
+	$(MAKE) MAKEFLAGS="-j5 --no-print-directory" modules \
+	    CROSS_COMPILE=$(CROSS_COMPILE) ARCH=$(ARCH) LOADADDR=0x8000
 
 override_dh_auto_install:
 	@echo "Installing kernel..."
@@ -33,10 +35,11 @@ override_dh_auto_install:
 	install -D -o0 -g0 -m644 vmlinux "$(kernel_destdir)/boot/vmlinux"
 	@echo "Installing kernel modules..."
 	$(MAKE) INSTALL_MOD_PATH="$(kernel_destdir)" modules_install \
-	    CROSS_COMPILE=$(CROSS_COMPILE) ARCH=$(ARCH)
+	    CROSS_COMPILE=$(CROSS_COMPILE) ARCH=$(ARCH) LOADADDR=0x8000
 	@echo "Installing kernel headers..."
 	$(MAKE) INSTALL_HDR_PATH="$(headers_destdir)$(headers_path)" \
-	    headers_install CROSS_COMPILE=$(CROSS_COMPILE) ARCH=$(ARCH)
+	    headers_install CROSS_COMPILE=$(CROSS_COMPILE) ARCH=$(ARCH) \
+		LOADADDR=0x8000
 	@echo "Kernel installed into package."
 
 override_dh_auto_clean:
@@ -45,8 +48,8 @@ override_dh_auto_clean:
 override_dh_strip:
 	dh_strip --dbg-package=spacemonkey-kernel-$(PKGVER)-dbg
 ifeq (,$(filter nostrip,$(DEB_BUILD_OPTIONS)))
-	# dh_strip apparently can't be made to recognize and strip .ko modules
-	# or vmlinux; do them manually
+# dh_strip apparently can't be made to recognize and strip .ko modules
+# or vmlinux; do them manually
 	find $(kernel_destdir) -name '*.ko' -printf '%P\n' | \
 	while read f; do \
 	    install -d "$(debug_destdir)/$$(dirname $$f)"; \
