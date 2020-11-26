@@ -31,6 +31,10 @@
 				marvell,pins = "mpp21";
 				marvell,function = "gpio";
 			};
+			pmx_button_func: pmx-button_func {
+				marvell,pins = "mpp37";
+				marvell,function = "gpio";
+			};
 			// pmx_usb_power_enable: pmx-usb-power-enable {
 			// 	marvell,pins = "mpp29";
 			// 	marvell,function = "gpio";
@@ -57,35 +61,26 @@
 		misc {
 			label = "status:blue:misc";
 			gpios = <&gpio0 21 GPIO_ACTIVE_LOW>;
+			default-state = "keep";
 		};
 		health {
 			label = "status:green:health";
 			gpios = <&gpio0 28 GPIO_ACTIVE_LOW>;
-			default-state = "keep";
 		};
 		fault {
 			label = "status:orange:fault";
 			gpios = <&gpio0 23 GPIO_ACTIVE_LOW>;
 		};
 	};
-	// regulators {
-	// 	compatible = "simple-bus";
-	// 	#address-cells = <1>;
-	// 	#size-cells = <0>;
-	// 	pinctrl-0 = <&pmx_usb_power_enable>;
+	// gpio-keys {
+	//     compatible = "gpio-keys";
+	// 	pinctrl-0 = < &pmx_button_func >;
 	// 	pinctrl-names = "default";
 
-	// 	usb_power: regulator@1 {
-	// 		compatible = "regulator-fixed";
-	// 		reg = <1>;
-	// 		regulator-name = "USB Power";
-	// 		regulator-min-microvolt = <5000000>;
-	// 		regulator-max-microvolt = <5000000>;
-	// 		enable-active-high;
-	// 		regulator-always-on;
-	// 		regulator-boot-on;
-	// 		gpio = <&gpio0 29 GPIO_ACTIVE_HIGH>;
-	// 	};
+	// 	button@1 {
+	// 	    label = "func button";
+	// 		gpios = <>
+	// 	}
 	// };
 };
 
@@ -93,6 +88,7 @@
 	chip-delay = <25>; // TC58NVG1S3ETA00
 	status = "okay";
 
+// These are definitely overridded by the command line partitions. What happens if we don't supply those?
 	partition@0 {
 		label = "u-boot";
 		reg = <0x0000000 0x100000>;
