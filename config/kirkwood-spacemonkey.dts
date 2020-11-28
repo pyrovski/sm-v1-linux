@@ -128,6 +128,6 @@
 	status = "okay";
 	ethernet0-port@0 {
 		phy-handle = <&ethphy0>;
-		local-mac-address = [70 93 f8 00 09 7b];
+        // Leave MAC unset to use the address configured by u-boot.
 	};
 };
