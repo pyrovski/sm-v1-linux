@@ -14,7 +14,7 @@ KERNEL_URL      := $(KERNEL_MIRROR)/$(KERNEL_URL_PATH)
 KERNEL_DIR      := ./linux-$(KERNEL_VER)
 
 # space monkey kernel revision
-KERNEL_SM_REV  := 1
+KERNEL_SM_REV  := 1-nomac
 KERNEL_SM_PKG  := $(KERNEL_VER)-$(KERNEL_SM_REV)-armel
 
 SHA256=shasum -a 256
@@ -107,7 +107,7 @@ unpack_kernel: kernel-source-stamp
 
 $(DEB_CHANGESFILE) $(DEB_KERNELPKG): kernel-source-stamp $(DEB_PACKAGING_FILES)
 	chmod 755 $(KERNEL_DIR)/debian/rules
-	cd $(KERNEL_DIR) && dpkg-buildpackage $(BUILDPACKAGE_ARGS)
+	cd $(KERNEL_DIR) && dpkg-buildpackage -j $(BUILDPACKAGE_ARGS)
 
 PHONY += kernel
 kernel: $(DEB_CHANGESFILE)
